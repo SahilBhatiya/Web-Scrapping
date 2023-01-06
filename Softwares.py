@@ -3,10 +3,18 @@ from bs4 import BeautifulSoup
 import openpyxl
 import time
 
+
+# Controls
+Time_For_Page_To_Load = 1
+Display_Website = False
+
+
+
 # use headless Edge
 options = webdriver.EdgeOptions()
 options.use_chromium = True
-options.add_argument('headless')
+if not Display_Website:
+    options.add_argument('headless')
 # improve performance
 options.add_argument('disable-gpu')
 options.add_argument('disable-extensions')
@@ -18,13 +26,13 @@ driver = webdriver.Edge(options=options)
 
 # Navigate to the webpage
 print("Started")
-print("--" * 80)
+print("--" * 40)
 
 print("Loading webpage")
 driver.get("https://ftuapps.dev/?1")
 print("Webpage loaded")
 
-print("--" * 80)
+print("--" * 40)
 
 # Scroll down the webpage and wait for 5 seconds
 driver.execute_script("\n"
@@ -47,14 +55,14 @@ driver.execute_script("\n"
                       "setInterval(()=>{window.scrollTo(0, document.body.scrollHeight - 100);}, 310);"
                       "")
 
-print("please wait for 120 seconds")
-for i in range(1, 120):
+print(f"please wait for {Time_For_Page_To_Load} seconds")
+for i in range(1, Time_For_Page_To_Load + 1):
     time.sleep(1)
     print(f"{i} ", end="")
 
 # Get the HTML content of the webpage
 
-print("--" * 80)
+print("--" * 40)
 
 print("Fetching the HTML content of the webpage")
 html = driver.page_source
@@ -65,7 +73,7 @@ h2_elements = soup.find_all("h2")
 
 print("Fetched All Data")
 
-print("--" * 80)
+print("--" * 40)
 
 # Create a new workbook and sheet
 workbook = openpyxl.Workbook()
@@ -74,11 +82,11 @@ sheet = workbook.active
 # Add a header row to the sheet
 sheet.append(['Text', 'Link', 'Torrent'])
 
-print("--" * 80)
+print("--" * 40)
 
 print("Parsing The Content")
 
-print("--" * 80)
+print("--" * 40)
 
 print("Number of h2 elements found: ", len(h2_elements))
 
@@ -117,14 +125,14 @@ for h2 in h2_elements:
 
 print("Parsing Completed")
 
-print("--" * 80)
+print("--" * 40)
 
 print("Saving the Excel File")
 # Save the workbook to a file
 workbook.save('Software-List.xlsx')
 print("Saved the Excel File")
 
-print("--" * 80)
+print("--" * 40)
 
 print("Closing the Webdriver")
 
@@ -133,6 +141,6 @@ driver.close()
 
 print("Closed the Webdriver")
 
-print("--" * 80)
+print("--" * 40)
 
 print("Finished")
